@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Vanning</title>
+  <style type="text/css">
+    body {
+      background-color: rgb(228,247,252);
+    }
+
+    .div1 {
+      background-color: rgb(0,56,91);
+      color: white;
+      height: 70px;
+      width: 70px;
+      text-align: center;
+      font-family: Helvetica;
+      border-radius: 15%;
+
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #water {
+      grid-column: 3/6;
+      grid-row: 23/24;
+      padding: 6.25%;
+    }
+
+    #dateBox {
+      display: grid;
+      grid-template: 1fr / 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+      grid-gap: 1%;
+      width: 50%;
+    }
+
+
+    #chooseBox {
+      display: grid;
+      grid-template: 1fr 1fr / 1fr;
+      grid-gap: 1%;
+      width: 50%;
+    }
+
+    .inp {
+      width: 80%;
+
+    }
+
+    form {
+      display: grid;
+      grid-row-gap: 10px;
+      grid-row: 2/5;
+      grid-column: 1/8;
+    }
+
+    .formDiv {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    }
+
+    #mainBox {
+      display: grid;
+      grid-template: 1fr / 1fr 6fr;
+      padding: 5% 10%;
+    }
+
+    #timeForm {
+      display: grid;
+    }
+
+
+    
+  </style>
+</head>
+<body>
+
+
+
+<div id="mainBox">
+  <div id="chooseBox">
+    <div class="div1" id="kran1"> Kran1 </div>
+    <div class="div1" id="kran2"> Kran2 </div>
+    <div class="div1" id="kran3"> Kran3 </div>
+    <div class="div1" id="kran4"> Kran4 </div>
+    <div class="div1" id="kran5"> Kran5 </div>
+  </div>
+  <div id="dateBox">
+    <div class="div1"><p class="text"> MON </p></div>
+    <div class="div1"><p class="text"> TUE </p></div>
+    <div class="div1"><p class="text"> WEN </p></div>
+    <div class="div1"><p class="text"> THU </p></div>
+    <div class="div1"><p class="text"> FRI </p></div>
+    <div class="div1"><p class="text"> SAT </p></div>
+    <div class="div1"><p class="text"> SUN </p></div>
+  
+
+  <form id="mainForm">
+    <div class="formDiv">
+      <input type="number" name="" class="inp" id="mon" required="" min="-1" max="24">
+      <input type="number" name="" class="inp" id="tue" required="" min="-1" max="24">
+      <input type="number" name="" class="inp" id="wen" required="" min="-1" max="24">
+      <input type="number" name="" class="inp" id="thu" required="" min="-1" max="24">
+      <input type="number" name="" class="inp" id="fri" required="" min="-1" max="24">
+      <input type="number" name="" class="inp" id="sat" required="" min="-1" max="24">
+      <input type="number" name="" class="inp" id="sun" required="" min="-1" max="24">
+    </div>
+    <div class="formDiv" id="timeForm">
+      <input type="number" name="" class="inp" id="timeMon">
+      <input type="number" name="" class="inp" id="timeTue">
+      <input type="number" name="" class="inp" id="timeWen">
+      <input type="number" name="" class="inp" id="timeThu">
+      <input type="number" name="" class="inp" id="timeFri">
+      <input type="number" name="" class="inp" id="timeSat">
+      <input type="number" name="" class="inp" id="timeSun">
+    </div>
+    <div class="formDiv" id="pmwForm">
+      <input type="number" name="" class="inp" id="pmwMon" min="50" max="100">
+      <input type="number" name="" class="inp" id="pmwTue" min="50" max="100">
+      <input type="number" name="" class="inp" id="pmwWen" min="50" max="100">
+      <input type="number" name="" class="inp" id="pmwThu" min="50" max="100">
+      <input type="number" name="" class="inp" id="pmwFri" min="50" max="100">
+      <input type="number" name="" class="inp" id="pmwSat" min="50" max="100">
+      <input type="number" name="" class="inp" id="pmwSun" min="50" max="100">
+    </div>
+  <button type="submit"> Push data </button>
+</form>
+
+   <div class="div1" id="water">
+      WATER
+    </div>
+  </div>
+<div> 
+
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-app.js";
+
+  // https://www.youtube.com/watch?v=7hB2ASYBkXo
+
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+
+  import { getDatabase, ref, child, get, set, update, remove, onValue} from "https://www.gstatic.com/firebasejs/10.3.0/firebase-database.js";
+
+  const db = getDatabase()
+
+ const button = document.getElementById("addB")
+
+ const timeForm = document.getElementById("timeForm");
+ const waterButton = document.getElementById("water")
+ const pmwForm = document.getElementById("pmwForm")
+
+const mon = document.getElementById("mon")
+const tue = document.getElementById("tue")
+const wen = document.getElementById("wen")
+const thu = document.getElementById("thu")
+const fri = document.getElementById("fri")
+const sat = document.getElementById("sat")
+const sun = document.getElementById("sun")
+
+const mainForm = document.getElementById("mainForm")
+
+/*
+const kran1 = document.getElementById("kran1")
+const kran2 = document.getElementById("kran2")
+const kran3 = document.getElementById("kran3")
+const kran4 = document.getElementById("kran4")
+const kran5 = document.getElementById("kran5")
+*/
+
+
+var timeDays = [
+
+[timeMon, "timeMon"],
+[timeTue, "timeTue"],
+[timeWen, "timeWen"],
+[timeThu, "timeThu"],
+[timeFri, "timeFri"],
+[timeSat, "timeSat"],
+[timeSun, "timeSun"]
+
+  ];
+
+var timeTaps = [
+["time1", []],
+["time2", []],
+["time3", []],
+["time4", []],
+["time5", []]
+  ]
+
+var pmwDays = [
+  [pmwMon, "pmwMon"],
+  [pmwTue, "pmwTue"],
+  [pmwWen, "pmwWen"],
+  [pmwThu, "pmwThu"],
+  [pmwFri, "pmwFri"],
+  [pmwSat, "pmwSat"],
+  [pmwSun, "pmwSun"]
+  ];
+
+var pmwTaps = [
+  ["pmw1", []],
+  ["pmw2", []],
+  ["pmw3", []],
+  ["pmw4", []],
+  ["pmw5", []]
+  ]
+
+for (let i=0; i<timeDays.length; i++) {
+  timeDays[i][0] = document.getElementById(timeDays[i][1])
+}
+
+for (let i=0; i<pmwDays.length; i++) {
+  pmwDays[i][0] = document.getElementById(pmwDays[i][1])
+}
+
+
+
+var currentTap = -1;
+var htmlKran = [
+
+  [kran1, "kran1", "1"],
+  [kran2, "kran2", "2"],
+  [kran3, "kran3", "3"],
+  [kran4, "kran4", "4"],
+  [kran5, "kran5", "5"]
+
+  ];
+
+
+for (let i=0; i<htmlKran.length; i++) {
+htmlKran[i][0] = document.getElementById(htmlKran[i][1]) 
+}
+
+
+
+var kranNow = "kran1";
+var kranNowT = "tid1";
+var kranNowP = "pmw1";
+
+console.log(kranNowT)
+
+var oppStart = false;
+
+var taps = [
+
+["kran1", []],
+["kran2", []],
+["kran3", []],
+["kran4", []],
+["kran5", []]
+
+  ];
+
+setTimeout(function() {
+  oppStart = true
+}, 1000);
+
+
+
+
+function pushKran(newKran, op, num) {
+  kranNow = newKran
+  kranNowT = "time" + num
+  kranNowP = "pmw" + num
+
+  console.log(kranNowT)
+  console.log(kranNowP)
+  console.log(kranNow)
+
+  pushData1(op, "currentO")
+}
+
+
+
+ function pushData() {
+            const data = glider.value
+            set(ref(db, 'vann1'), {
+                value: data
+            });
+            document.getElementById('data').value = ''; // Clear input field 
+        }
+
+  function pushData1(data, callsign) {
+    var dt = data;
+    set(ref(db, callsign), {
+      value: dt
+    });
+  }
+
+
+function errorListener(snapshot) {
+  if (oppStart == true) {
+    alert(snapshot.val()['value'])
+  }
+}
+
+
+function listener(snapshot) {
+  if (oppStart == true) {
+  alert(
+    //snapshot.val()['value']
+    "Update successful"
+    )
+}
+};
+
+
+function tapListener(snapshot) {
+
+  for (let i=0; i < taps.length; i++) {
+    if (taps[i][0] in snapshot.val()){
+      taps[i][1] = snapshot.val()[taps[i][0]]
+
+}
+}
+
+for (let i=0; i < timeTaps.length; i++) {
+    if (timeTaps[i][0] in snapshot.val()){
+      timeTaps[i][1] = snapshot.val()[timeTaps[i][0]]
+    }
+
+
+}
+
+for (let i=0; i < pmwTaps.length; i++) {
+    if (pmwTaps[i][0] in snapshot.val()){
+      pmwTaps[i][1] = snapshot.val()[pmwTaps[i][0]]
+
+    }
+
+
+}
+
+
+//console.log(taps)
+
+}
+
+
+const errorRef = ref(db, "twinError")
+const newRef = ref(db, "readback")
+const rootRef = ref(db, "/")
+
+onValue(newRef, listener)
+onValue(rootRef, tapListener)
+onValue(errorRef, errorListener)
+
+
+function showVal(x) {
+  mon.value = taps[x][1][0];
+  tue.value = taps[x][1][1];
+  wen.value = taps[x][1][2];
+  thu.value = taps[x][1][3];
+  fri.value = taps[x][1][4];
+  sat.value = taps[x][1][5];
+  sun.value = taps[x][1][6];
+
+for (let i=0; i < timeDays.length; i++) {
+  timeDays[i][0].value = timeTaps[x][1][i]
+}
+
+
+for (let i=0; i < pmwDays.length; i++) {
+  pmwDays[i][0].value = pmwTaps[x][1][i]
+}
+
+  if (currentTap == -1) {
+   currentTap = x;
+  }
+
+  htmlKran[currentTap][0].style.backgroundColor = "rgb(0,56,91)";
+  htmlKran[currentTap][0].style.color = "white";
+
+  htmlKran[x][0].style.backgroundColor = "white";
+  htmlKran[x][0].style.color = "rgb(0,56,91)";
+
+  currentTap = x;
+
+if (currentTap == 0 || currentTap == 1) {
+ 
+  timeForm.style.display = "none"
+  for (let i=0; i < timeDays.length; i++) {
+    timeDays[i][0].removeAttribute("required")
+  }
+
+  pmwForm.style.display = "none"
+  for (let i=0; i < pmwDays.length; i++) {
+    pmwDays[i][0].removeAttribute("required")
+  }
+
+}
+else {
+
+  timeForm.style.display = "grid"
+   for (let i=0; i < timeDays.length; i++) {
+    timeDays[i][0].setAttribute("required", "true")
+  }
+
+  pmwForm.style.display = "grid"
+   for (let i=0; i < pmwDays.length; i++) {
+    pmwDays[i][0].setAttribute("required", "true")
+  }
+
+}
+
+}
+
+function pushData2() {
+
+  var dataMon = mon.value
+  var dataTue = tue.value
+  var dataWen = wen.value
+  var dataThu = thu.value
+  var dataFri = fri.value
+  var dataSat = sat.value
+  var dataSun = sun.value
+
+ set(ref(db, kranNowT), {
+  "0": timeDays[0][0].value,
+  "1": timeDays[1][0].value,
+  "2": timeDays[2][0].value,
+  "3": timeDays[3][0].value,
+  "4": timeDays[4][0].value,
+  "5": timeDays[5][0].value,
+  "6": timeDays[6][0].value
+
+
+ });
+
+  set(ref(db, kranNow), {
+    "0": mon.value,
+    "1": dataTue,
+    "2": dataWen,
+    "3": dataThu,
+    "4": dataFri,
+    "5": dataSat,
+    "6": dataSun
+  });
+
+  set(ref(db, kranNowP), {
+  "0": pmwDays[0][0].value,
+  "1": pmwDays[1][0].value,
+  "2": pmwDays[2][0].value,
+  "3": pmwDays[3][0].value,
+  "4": pmwDays[4][0].value,
+  "5": pmwDays[5][0].value,
+  "6": pmwDays[6][0].value
+
+
+ });
+
+}
+
+
+
+
+mainForm.addEventListener("submit", pushData2)
+
+ //button.addEventListener("click", pushData2);
+
+ waterButton.addEventListener("mousedown", function() {
+  pushData1("True", "Water");
+ });
+  waterButton.addEventListener("mouseup", function() {
+  pushData1("False", "Water");
+ });
+  waterButton.addEventListener("mouseout", function() {
+  pushData1("False", "Water");
+ });
+
+
+for (let i=0; i < htmlKran.length; i++) {
+
+htmlKran[i][0].addEventListener("click", function() {
+  pushKran(htmlKran[i][1], htmlKran[i][2], i+1);
+  showVal(i);
+ });
+
+htmlKran[i][0].addEventListener("mouseover", function(){
+  htmlKran[i][0].style.backgroundColor = "rgb(188,210,217)"
+});
+
+htmlKran[i][0].addEventListener("mouseout", function(){
+  if (i == currentTap) {
+    htmlKran[i][0].style.color = "rgb(0,56,91)" 
+    htmlKran[i][0].style.backgroundColor = "white" }
+  else {
+    htmlKran[i][0].style.backgroundColor = "rgb(0,56,91)"
+    htmlKran[i][0].style.color = "white"
+  }
+});
+
+
+}
+
+
+
+/*   KRAN 4 OG TRE ER NOE SPACA MED SJEKK D UT - GJELDER TIMING FUNCTION     */
+
+
+
+</script>
+
+
+<!-- 
+
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+           padding: 4px;
+        }
+-->
+
+
+</html>
